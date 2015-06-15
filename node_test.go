@@ -9,15 +9,15 @@ var (
 )
 
 func TestMain(t *testing.T) {
-	h.AddChild(b)
-	b.AddChild(a)
-	b.AddChild(c)
-	a.AddChild(f)
-	c.AddChild(d)
-	c.AddChild(e)
-	c.AddChild(e)
-	d.AddChild(e)
-	e.AddChild(b)
+	h.AddChild(Edge(b, 2))
+	b.AddChild(Edge(a, 4))
+	b.AddChild(Edge(c, 3))
+	a.AddChild(Edge(f, 5))
+	c.AddChild(Edge(d, 2))
+	c.AddChild(Edge(e, 1))
+	c.AddChild(Edge(e, 3))
+	d.AddChild(Edge(e, 5))
+	e.AddChild(Edge(b, 1))
 }
 	
 func TestCanReachSelf(t *testing.T) {
@@ -30,7 +30,7 @@ func TestCanReachSelf(t *testing.T) {
 func TestCanReachChild(t *testing.T) {
 	node := new (Node)
 	child := new (Node)
-	node.AddChild(child)
+	node.AddChild(Edge(child, 1))
 	if !node.CanReach(child) {
 		t.Fatalf("Node couldn't reach its child")
 	}
@@ -59,5 +59,12 @@ func TestMinHopCount(t *testing.T) {
 	hops := h.HopsTo(e)
 	if hops != 3 {
 		t.Fatalf("E should be 3 hops from H but was %d", hops)
+	}
+}
+
+func TestCostBetweenNodes(t *testing.T) {
+	cost := h.CostTo(c)
+	if cost != 5 {
+		t.Fatalf("H to C should cost 5 but was %d", cost)
 	}
 }
